@@ -1,0 +1,196 @@
+{
+  "api": {
+    "allaireapi": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "allairefunction"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "API Gateway"
+    },
+    "allaireapi1": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "allairefunctions"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "API Gateway"
+    }
+  },
+  "auth": {
+    "allaireapitestc6e9a63b": {
+      "customAuth": false,
+      "dependsOn": [],
+      "frontendAuthConfig": {
+        "mfaConfiguration": "OFF",
+        "mfaTypes": [
+          "SMS"
+        ],
+        "passwordProtectionSettings": {
+          "passwordPolicyCharacters": [],
+          "passwordPolicyMinLength": 8
+        },
+        "signupAttributes": [
+          "EMAIL"
+        ],
+        "socialProviders": [],
+        "usernameAttributes": [],
+        "verificationMechanisms": [
+          "EMAIL"
+        ]
+      },
+      "providerPlugin": "awscloudformation",
+      "service": "Cognito"
+    }
+  },
+  "function": {
+    "allairefunction": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributeEnvMap": {
+            "Arn": "TABLE_ARN",
+            "Name": "TABLE_NAME"
+          },
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "storage",
+          "resourceName": "ESP8266NEW"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "allairefunctions": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributeEnvMap": {
+            "Arn": "TABLE_ARN",
+            "Name": "TABLE_NAME"
+          },
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "storage",
+          "resourceName": "ESP8266NEW"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    }
+  },
+  "parameters": {
+    "AMPLIFY_function_allairefunction_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "allairefunction"
+        }
+      ]
+    },
+    "AMPLIFY_function_allairefunction_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "allairefunction"
+        }
+      ]
+    },
+    "AMPLIFY_function_allairefunctions_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "allairefunctions"
+        }
+      ]
+    },
+    "AMPLIFY_function_allairefunctions_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "allairefunctions"
+        }
+      ]
+    },
+    "AMPLIFY_storage_ESP8266NEW_arn": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "ESP8266NEW"
+        }
+      ]
+    },
+    "AMPLIFY_storage_ESP8266NEW_partitionKeyName": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "ESP8266NEW"
+        }
+      ]
+    },
+    "AMPLIFY_storage_ESP8266NEW_partitionKeyType": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "ESP8266NEW"
+        }
+      ]
+    },
+    "AMPLIFY_storage_ESP8266NEW_region": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "ESP8266NEW"
+        }
+      ]
+    },
+    "AMPLIFY_storage_ESP8266NEW_sortKeyName": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "ESP8266NEW"
+        }
+      ]
+    },
+    "AMPLIFY_storage_ESP8266NEW_sortKeyType": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "ESP8266NEW"
+        }
+      ]
+    },
+    "AMPLIFY_storage_ESP8266NEW_tableName": {
+      "usedBy": [
+        {
+          "category": "storage",
+          "resourceName": "ESP8266NEW"
+        }
+      ]
+    }
+  },
+  "storage": {
+    "ESP8266NEW": {
+      "dependsOn": [],
+      "providerPlugin": "awscloudformation",
+      "service": "DynamoDB",
+      "serviceType": "imported"
+    }
+  }
+}

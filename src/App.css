@@ -2,16 +2,19 @@
   text-align: center;
 }
 
+
 .App-logo {
   height: 40vmin;
   pointer-events: none;
 }
+
 
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
   }
 }
+
 
 .App-header {
   background-color: #282c34;
@@ -22,11 +25,38 @@
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
+  position: relative; /* Added for button positioning */
 }
+
+
+.App-header h2 {
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+
+.App-header h3 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+
+/* CSS for the sign out button */
+.sign-out-button {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  font-size: 1rem;
+  padding: 0.5rem;
+  cursor: pointer;
+}
+
 
 .App-link {
   color: #61dafb;
 }
+
 
 @keyframes App-logo-spin {
   from {

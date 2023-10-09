@@ -1,0 +1,46 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-allaireapitest-dev-10558-authRole",
+      "UnauthRoleArn": "arn:aws:iam::623481064187:role/amplify-allaireapitest-dev-10558-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::623481064187:role/amplify-allaireapitest-dev-10558-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-allaireapitest-dev-10558-deployment",
+      "UnauthRoleName": "amplify-allaireapitest-dev-10558-unauthRole",
+      "StackName": "amplify-allaireapitest-dev-10558",
+      "StackId": "arn:aws:cloudformation:us-east-1:623481064187:stack/amplify-allaireapitest-dev-10558/89161250-6661-11ee-8771-0a5e2ffea427",
+      "AmplifyAppId": "d3jgjwj0bjs3ro",
+      "APIGatewayAuthURL": "https://s3.amazonaws.com/amplify-allaireapitest-dev-10558-deployment/amplify-cfn-templates/api/APIGatewayAuthStack.json"
+    },
+    "categories": {
+      "auth": {
+        "allaireapitestc6e9a63b": {}
+      },
+      "storage": {
+        "ESP8266NEW": {
+          "tableName": "ESP8266_NEW",
+          "region": "us-east-1",
+          "arn": "arn:aws:dynamodb:us-east-1:623481064187:table/ESP8266_NEW",
+          "partitionKeyName": "temperature",
+          "partitionKeyType": "N",
+          "sortKeyName": "ts",
+          "sortKeyType": "N"
+        }
+      },
+      "function": {
+        "allairefunction": {
+          "deploymentBucketName": "amplify-allaireapitest-dev-10558-deployment",
+          "s3Key": "amplify-builds/allairefunction-5a626c76482b4a695366-build.zip"
+        },
+        "allairefunctions": {
+          "deploymentBucketName": "amplify-allaireapitest-dev-10558-deployment",
+          "s3Key": "amplify-builds/allairefunctions-746a393057674b436b35-build.zip"
+        }
+      },
+      "api": {
+        "allaireapi": {},
+        "allaireapi1": {}
+      }
+    }
+  }
+}

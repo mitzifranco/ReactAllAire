@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "paths": {
+    "/sensors": {
+      "name": "/sensors",
+      "lambdaFunction": "allairefunctions",
+      "permissions": {
+        "setting": "open"
+      }
+    }
+  }
+}
