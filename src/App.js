@@ -32,6 +32,7 @@ function App() {
         {({ signOut, user }) => (
           <main>
             <div className="App">
+              <div></div>
               <header className="App-header">
                 <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
                   <h2>My App Content</h2>
