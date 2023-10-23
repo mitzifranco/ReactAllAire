@@ -99,7 +99,7 @@ return (
             <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
             <Navbar className="navbar">
               <Container>
-                <Navbar.Brand href="#home">
+                <Navbar.Brand>
                   <img
                     src={logoImage}
                     className="brand-logo"
