@@ -1,21 +1,16 @@
+
 .App {
   text-align: center;
 }
-
-
 .App-logo {
   height: 40vmin;
   pointer-events: none;
 }
-
-
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
   }
 }
-
-
 .App-header {
   background-color: #282c34;
   min-height: 100vh;
@@ -25,24 +20,17 @@
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
-  position: relative; /* Added for button positioning */
+  position: relative;
 }
-
-
 .App-header h2 {
   font-size: 2rem;
   font-weight: bold;
 }
-
-
 .App-header h3 {
   font-size: 1.5rem;
   font-weight: bold;
   margin-bottom: 1rem;
 }
-
-
-/* CSS for the sign out button */
 .sign-out-button {
   position: absolute;
   top: 20px;
@@ -51,13 +39,9 @@
   padding: 0.5rem;
   cursor: pointer;
 }
-
-
 .App-link {
   color: #61dafb;
 }
-
-
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
@@ -65,4 +49,69 @@
   to {
     transform: rotate(360deg);
   }
+}
+/* New styling for Navbar */
+.navbar {
+  background-color: #282c34;
+  padding: 0.5rem 1rem;
+}
+/* Styling for logo in Navbar */
+.navbar img {
+  margin-right: 0.5rem;
+}
+/* Make Nav items horizontal */
+.my-custom-nav {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+/* Add spacing below the Nav */
+.nav-spacing {
+  margin-bottom: 2rem;
+}
+/* New CSS class for justified Nav Items */
+.justified-nav-item {
+  flex-grow: 1;
+  text-align: center;
+}
+/* Force Nav.Link items to look like pills */
+.justified-nav-item a.nav-link {
+  text-decoration: none;
+  border-radius: 0.25rem;
+  background-color: #368E64;
+  color: white;
+  padding: 0.5rem 1rem;
+  margin: 0.25rem;
+}
+/* For active links */
+.justified-nav-item a.nav-link.active {
+  background-color: #2C6B50;
+}
+/* For disabled links */
+.justified-nav-item a.nav-link.disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+/* For the brand container */
+.brand-container {
+  display: flex;
+  align-items: center;
+}
+/* For the brand name */
+.brand-name {
+  font-size: 4rem;
+  font-weight: bold;
+  margin-left: 10px;
+  color: white;  /* or set a specific color */
+  /*text-decoration: none !important;*/
+}
+/* For the logo */
+.brand-logo {
+  width: 70px;
+  height: 50px;
+  margin-right: 10px;
+}
+/* To remove underline from Navbar.Brand */
+.custom-navbar-brand, .custom-navbar-brand:hover, .custom-navbar-brand:focus {
+  text-decoration: none;
 }
