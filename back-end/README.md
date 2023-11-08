@@ -3,7 +3,7 @@ This back-end uses Node.js and Express.js
 
 ## To run this locally
 Open a new terminal and make sure you are in the .../back-end file
-run in the terminal "npm install" to install the neccessary modules locally
+run in the nterminal "npm install" to install the neccessary modules locally
 Next, run 'node app.js' and the app will be running
 Go to the url: http://localhost:9000/
 add /sensor/all to the end of the localhost url to get all the data in dynamoDB
