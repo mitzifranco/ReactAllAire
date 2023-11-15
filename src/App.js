@@ -36,7 +36,7 @@ function App() {
       SmokeDetector: item.SmokeDetector,
       Filter: item.Filter
     }))
-    .sort((a, b) => a.rawTs - b.rawTs);
+      .sort((a, b) => a.rawTs - b.rawTs);
   };
 
 
@@ -60,10 +60,10 @@ function App() {
   };
 
   const renderHomeDashboard = () => {
-    const alarmStatus = (value) => value === 0 ? 
-      <span style={{color: 'green'}}>Normal</span> : 
-      <span style={{color: 'red'}}>Warning</span>;
-  
+    const alarmStatus = (value) => value === 0 ?
+      <span style={{ color: 'green' }}>Normal</span> :
+      <span style={{ color: 'red' }}>Warning</span>;
+
     return (
       <div className="dashboard-container">
         <div className="dashboard-bubble">
@@ -85,7 +85,7 @@ function App() {
             <span className="dashboard-data">PM2.5: {latestData['PM2.5']}, PM1.0: {latestData['PM1.0']}, PM10: {latestData['PM10']}</span>
           </div>
         </div>
-  
+
         <div className="dashboard-bubble">
           <h3 className="dashboard-title">Alarms</h3>
           <div className="dashboard-row">
@@ -100,26 +100,116 @@ function App() {
       </div>
     );
   };
-  
+  const calculateAverages = (data) => {
+    const sum = data.reduce((acc, item) => {
+      Object.keys(item).forEach(key => {
+        if (typeof item[key] === 'number') {
+          acc[key] = (acc[key] || 0) + item[key];
+        }
+      });
+      return acc;
+    }, {});
 
+    const averages = {};
+    Object.keys(sum).forEach(key => {
+      if (key !== 'rawTs') {
+        averages[key] = sum[key] / data.length;
+      }
+    });
+
+    return averages;
+  };
+
+  const generateSensorDescriptions = (averages) => {
+    return {
+      Temperature: `The average temperature is ${averages.Temperature.toFixed(2)}°C. Temperatures around 21-23°C are generally considered comfortable. ${
+        averages.Temperature > 25 ? 'Higher temperatures may cause discomfort or increased energy costs for cooling.' : 'Lower temperatures might require heating for comfort.'
+      }`,
+
+      Humidity: `The average humidity is ${averages.Humidity.toFixed(2)}%. Ideal indoor humidity levels are usually between 30-50%. ${
+        averages.Humidity > 50 ? 'High humidity can lead to mold growth and may worsen allergies.' : 'Low humidity can cause dry skin and irritate respiratory conditions.'
+      }`,
+
+      CO2: `The average CO2 level is ${averages['Carbon Dioxide'].toFixed(2)} ppm. Normal indoor levels are typically between 400-1000 ppm. ${
+        averages['Carbon Dioxide'] > 1000 ? 'Higher levels can cause stuffiness and drowsiness, and indicate poor ventilation.' : 'Levels within this range suggest good air quality.'
+      }`,
+
+      IAQ: {
+        'PM2.5': `Average PM2.5 is ${averages['PM2.5'].toFixed(2)} μg/m³. 
+         ${averages['PM2.5'] > 35 ? 'Higher levels can affect heart and lung health.' : 'Lower levels indicate good air quality.'
+        }`,
+        'PM1.0': `Average PM1.0 is ${averages['PM1.0'].toFixed(2)} μg/m³. Smaller particals; high levels can impact air quality.`,
+        'PM10': `Average PM10 is ${averages['PM10'].toFixed(2)} μg/m³. Higher levels can cause respetory issues.`
+      }
+    };
+  };
   const renderChart = () => {
     if (loading) {
       return <p>Loading...</p>;
     }
-
+  
+    const averages = calculateAverages(sensorData);
+    const descriptions = generateSensorDescriptions(averages);
+    const sensorDescription = descriptions[activeTab];
+  
+    const renderDescription = (description) => {
+      if (typeof description === 'string') {
+        const splitDescription = description.split('. ');
+        return (
+          <div>
+            <p>{splitDescription[0]}.</p>
+            <p>{splitDescription[1]}</p>
+          </div>
+        );
+      } else if (typeof description === 'object') {
+        return Object.entries(description).map(([key, value]) => <p key={key}>{value}</p>);
+      }
+    };
+    
+  
     switch (activeTab) {
       case 'Temperature':
-        return <ChartComponent data={sensorData} dataKeys={[{ key: "Temperature", unit: "°C" }]} title="Temperature Data" />;
+        return (
+          <div>
+            <h3>Temperature Data</h3>
+            <p>{`Current Date: ${new Date().toLocaleDateString()}`}</p>
+            <ChartComponent data={sensorData} dataKeys={[{ key: "Temperature", unit: "°C" }]} />
+            {renderDescription(sensorDescription)}
+          </div>
+        );
       case 'Humidity':
-        return <ChartComponent data={sensorData} dataKeys={[{ key: "Humidity", unit: "%" }]} title="Humidity Data" />;
+        return (
+          <div>
+            <h3>Humidity Data</h3>
+            <p>{`Current Date: ${new Date().toLocaleDateString()}`}</p>
+            <ChartComponent data={sensorData} dataKeys={[{ key: "Humidity", unit: "%" }]} />
+            {renderDescription(sensorDescription)}
+          </div>
+        );
       case 'CO2':
-        return <ChartComponent data={sensorData} dataKeys={[{ key: "Carbon Dioxide", unit: "ppm" }]} title="CO2 Data" />;
-      case 'IAQ':
-        return <ChartComponent data={sensorData} dataKeys={[{ key: "PM2.5", unit: "μg/m³" }, { key: "PM1.0", unit: "μg/m³" }, { key: "PM10", unit: "μg/m³", color: "#d88484" }]} title="Indoor Air Quality Data" />;
+        return (
+          <div>
+            <h3>CO2 Data</h3>
+            <p>{`Current Date: ${new Date().toLocaleDateString()}`}</p>
+            <ChartComponent data={sensorData} dataKeys={[{ key: "Carbon Dioxide", unit: "ppm" }]} />
+            {renderDescription(sensorDescription)}
+          </div>
+        );
+        case 'IAQ':
+          return (
+            <div>
+              <h3>Indoor Air Quality Data</h3>
+              <p>{`Current Date: ${new Date().toLocaleDateString()}`}</p>
+              <ChartComponent data={sensorData} dataKeys={[{ key: "PM2.5", unit: "μg/m³" }, { key: "PM1.0", unit: "μg/m³" }, { key: "PM10", unit: "μg/m³", color: "#d88484" }]} />
+              {renderDescription(descriptions.IAQ)}
+            </div>
+          );
+        
       default:
         return <div>Select a tab to view data</div>;
     }
   };
+  
 
   const CustomTooltip = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
@@ -134,11 +224,11 @@ function App() {
         </div>
       );
     }
-  
+
     return null;
   };
-  
-  
+
+
   const ChartComponent = ({ data, dataKeys, title }) => (
     <div>
       <h3>{title}</h3>
@@ -150,30 +240,30 @@ function App() {
           <Tooltip content={<CustomTooltip />} />
           <Legend align="center" verticalAlign="top" layout="vertical" />
           {dataKeys.map(({ key, unit }, index) => {
-          let strokeColor = "#8884d8"; 
-          if (key === "PM10") {
-            strokeColor = "#d88484"; 
-          } else if (index % 2 === 0) {
-            strokeColor = "#8884d8"; 
-          } else {
-            strokeColor = "#82ca9d"; 
-          }
-          return (
-            <Line
-              key={key}
-              type="monotone"
-              dataKey={key}
-              name={`${key} (${unit})`}
-              stroke={strokeColor}
-              activeDot={key === "PM10" ? { r: 8 } : {}}
-            />
-          );
-        })}
-      </LineChart>
-    </ResponsiveContainer>
-  </div>
+            let strokeColor = "#8884d8";
+            if (key === "PM10") {
+              strokeColor = "#d88484";
+            } else if (index % 2 === 0) {
+              strokeColor = "#8884d8";
+            } else {
+              strokeColor = "#82ca9d";
+            }
+            return (
+              <Line
+                key={key}
+                type="monotone"
+                dataKey={key}
+                name={`${key} (${unit})`}
+                stroke={strokeColor}
+                activeDot={key === "PM10" ? { r: 8 } : {}}
+              />
+            );
+          })}
+        </LineChart>
+      </ResponsiveContainer>
+    </div>
   );
-  
+
 
   return (
     <Authenticator>
@@ -181,7 +271,7 @@ function App() {
         <main>
           <div className="App">
             <header className="App-header">
-              <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', height: '100%' }}>
                 <Navbar className="navbar">
                   <Container>
                     <Navbar.Brand>
