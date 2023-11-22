@@ -2,8 +2,16 @@
 
 # dependencies
 /node_modules
+node_modules
+\node_modules
 /.pnp
 .pnp.js
+
+# Ignore node_modules in the root of the project
+node_modules/
+
+# Ignore node_modules in any subdirectories
+**/node_modules/
 
 # testing
 /coverage
