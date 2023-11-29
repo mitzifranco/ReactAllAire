@@ -23,6 +23,7 @@ function App() {
   const [latestData, setLatestData] = useState({});
   const [apiUrl, setApiUrl] = useState('http://allaire-api.us-east-1.elasticbeanstalk.com/sensor/all');
   const [error, setError] = useState(null);
+  const [countdown, setCountdown] = useState(5); // Starting from 5 seconds
 
 
 
@@ -59,16 +60,35 @@ function App() {
           setLatestData(transformedData[transformedData.length - 1] || {});
         } else {
           setError("No data available for this selection.");
+          setCountdown(5); // Start countdown
         }
         setLoading(false);
       })
       .catch(err => {
         console.error("Failed to fetch sensor data:", err);
         setError("An error occurred while fetching data.");
+        setCountdown(5); // Start countdown
         setLoading(false);
       });
   }, [apiUrl]);
-  
+
+  useEffect(() => {
+    let timer;
+
+    if (error) {
+      timer = setInterval(() => {
+        setCountdown((prevCountdown) => prevCountdown - 1);
+      }, 1000);
+    }
+
+    return () => clearInterval(timer); // Cleanup timer
+  }, [error]);
+
+  useEffect(() => {
+    if (countdown === 0) {
+      window.location.reload();
+    }
+  }, [countdown]);
   
 
   const changeApiUrl = (url) => {
@@ -169,23 +189,18 @@ function App() {
 
   
   const renderChart = () => {
-    const dropdown = (
-      <div className="dropdown-container">
-        <select onChange={(e) => changeApiUrl(e.target.value)} value={apiUrl}>
-          <option value='http://allaire-api.us-east-1.elasticbeanstalk.com/sensor/today'>Today</option>
-          <option value='http://allaire-api.us-east-1.elasticbeanstalk.com/sensor/yesterday'>Yesterday</option>
-          
-          <option value='http://allaire-api.us-east-1.elasticbeanstalk.com/sensor/last-week'>Last Week</option>
-        </select>
-      </div>
-    );
-
+    
     if (loading) {
       return <p>Loading...</p>;
     }
-    
+  
     if (error) {
-      return <p>{error}</p>; // Display the error message
+      return (
+        <div>
+          <p>{error}</p>
+          <p>Page will refresh in {countdown} seconds...</p>
+        </div>
+      );
     }
     
   
@@ -207,16 +222,16 @@ function App() {
       }
     };
   
-    // const dropdown = (
-    //   <div className="dropdown-container">
-    //     <select onChange={(e) => changeApiUrl(e.target.value)} value={apiUrl}>
-    //       <option value='http://allaire-api.us-east-1.elasticbeanstalk.com/sensor/today'>Today</option>
-    //       <option value='http://allaire-api.us-east-1.elasticbeanstalk.com/sensor/yesterday'>Yesterday</option>
+    const dropdown = (
+      <div className="dropdown-container">
+        <select onChange={(e) => changeApiUrl(e.target.value)} value={apiUrl}>
+          <option value='http://allaire-api.us-east-1.elasticbeanstalk.com/sensor/today'>Today</option>
+          <option value='http://allaire-api.us-east-1.elasticbeanstalk.com/sensor/yesterday'>Yesterday</option>
           
-    //       <option value='http://allaire-api.us-east-1.elasticbeanstalk.com/sensor/last-week'>Last Week</option>
-    //     </select>
-    //   </div>
-    // );
+          <option value='http://allaire-api.us-east-1.elasticbeanstalk.com/sensor/last-week'>Last Week</option>
+        </select>
+      </div>
+    );
   
     return (
       <div className="chart-container">
@@ -285,12 +300,13 @@ function App() {
 
     return null;
   };
-
+  const isMobile = window.innerWidth <= 768;
 
   const ChartComponent = ({ data, dataKeys, title }) => (
+    
     <div>
       <h3>{title}</h3>
-      <ResponsiveContainer width={950} height={300}>
+      <ResponsiveContainer width={isMobile ? "110%" : "105%"} height={300}>
         <LineChart data={data} margin={{ top: 5, right: 100, left: 20, bottom: 5 }}>
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="formattedTs" padding={{ left: 30, right: 30 }} />
