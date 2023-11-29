@@ -159,7 +159,7 @@ router.get('/all', async (req, res) => {
 //sends the Email
 function sendSNSEmail(triggeredField) {
     // Get the current date and time
-    const currentDateTime = new Date().toLocaleString();
+    const currentDateTime = new Date().toLocaleString('en-US', { timeZone: 'America/New_York' });
 
     // Customize the message with the current date and time
     let message;
