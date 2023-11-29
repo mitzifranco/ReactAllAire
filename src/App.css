@@ -1,41 +1,35 @@
+
+
+
+/* Global Styles */
 .App {
   text-align: center;
+  background-color: #282c34; 
+  color: white;
+  /*max-width: 1200px; */
+  margin: auto;
+  padding: 20px;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
+/* Header Styles */
 .App-header {
-  background-color: #282c34;
+  background-color: #20232a; /* Slightly different shade for depth */
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
-  color: white;
   position: relative;
 }
 
-.App-header h2 {
+.App-header h2, .App-header h3 {
+  font-weight: bold;
   font-size: 2rem;
-  font-weight: bold;
+  margin-bottom: 20px;
 }
 
-.App-header h3 {
-  font-size: 1.5rem;
-  font-weight: bold;
-  margin-bottom: 1rem;
-}
-
+/* Sign-out Button */
 .sign-out-button {
   position: absolute;
   top: 20px;
@@ -43,106 +37,84 @@
   font-size: 1rem;
   padding: 0.5rem;
   cursor: pointer;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-/* Navbar styling */
-.navbar {
-  background-color: #282c34;
-  padding: 0.5rem 1rem;
-}
-
-.navbar img {
-  margin-right: 0.5rem;
-}
-
-.my-custom-nav {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-}
-
-.nav-spacing {
-  margin-bottom: 2rem;
-}
-
-.justified-nav-item {
-  flex-grow: 1;
-  text-align: center;
-}
-
-.justified-nav-item a.nav-link {
-  text-decoration: none;
-  border-radius: 0.25rem;
-  background-color: #368E64;
+  background-color: #4a4e69; 
   color: white;
+  border: none;
+  border-radius: 5px;
+}
+
+.sign-out-button:hover {
+  background-color: #373a47;
+}
+
+/* Navbar Styling */
+.navbar {
+  background-color: #20232a;
   padding: 0.5rem 1rem;
-  margin: 0.25rem;
-}
-
-.justified-nav-item a.nav-link.active {
-  background-color: #2C6B50;
-}
-
-.justified-nav-item a.nav-link.disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
-}
-
-.brand-container {
-  display: flex;
-  align-items: center;
 }
 
 .brand-name {
   font-size: 4rem;
   font-weight: bold;
   margin-left: 10px;
-  color: white;
+  color: white; 
 }
-
 .brand-logo {
+  height: 55px; 
   width: 70px;
-  height: 50px;
   margin-right: 10px;
+  margin-bottom: 45px;
 }
 
-.custom-navbar-brand, .custom-navbar-brand:hover, .custom-navbar-brand:focus {
+
+
+/* Navbar Links */
+.my-custom-nav, .justified-nav-item {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.justified-nav-item a.nav-link {
   text-decoration: none;
+  border-radius: 0.25rem;
+  background-color: #4a4e69;
+  color: white;
+  padding: 0.5rem 1rem;
+  margin: 0.25rem;
 }
 
+.justified-nav-item a.nav-link.active, .justified-nav-item a.nav-link:hover {
+  background-color: #373a47;
+}
+
+
+/* Dashboard Styling */
 .dashboard-container {
   display: flex;
   justify-content: space-around;
-  margin: 20px;
-  flex-wrap: wrap; /* Allows items to wrap if needed */
+  flex-wrap: wrap;
+  gap: 20px;
+  background-color: #20232a; 
+  padding-top: 40px; 
+  margin: 20px; 
 }
 
+
 .dashboard-bubble {
-  background-color: #f2f2f2df;
+  background-color: rgba(245, 245, 245, 0.858);
   border-radius: 15px;
-  padding: 20px;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-  width: 46%; /* Adjust width as per your requirement */
+  padding: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+  width: 48%;
+  color: white;
   height: fit-content;
 }
 
 .dashboard-row {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
 }
 
 .dashboard-text {
@@ -161,26 +133,57 @@
   color: black; 
 }
 
+/* Chart Container */
+.chart-container-with-buttons {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
 .chart-container {
+  background-color: #20232a; 
+  padding: 20px; 
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+  margin: 20px; 
+  width: 72.5%;
+}
+
+
+.chart-container h3 {
+  margin-bottom: 20px;
+  font-size: 1.4em;
+  font-weight: 600;
+  color: white; 
+}
+
+/* Dropdown Styling */
+.dropdown-container {
+  margin-bottom: 10px;
+  margin-top: 25px;
+}
+
+.dropdown-container select {
+  padding: 10px 15px;
   width: 100%;
-  height: 300px;
-  margin: auto;
+  border-radius: 8px;
+  border: 1px solid #4a4e69;
+  background-color: #20232a;
+  color: white;
+  text-align-last: center;
+}
+
+/* Tooltip Styling */
+.custom-tooltip, .tooltip-label, .tooltip-entry {
+  color: black;
 }
 
 .custom-tooltip {
   background-color: #fff;
   padding: 10px;
   border: 1px solid #ccc;
-  color: black;
 }
 
-.tooltip-label {
+.tooltip-label, .tooltip-entry {
   margin: 0;
-  color: black;
 }
-
-.tooltip-entry {
-  margin: 0;
-  color: black;
-}
-
