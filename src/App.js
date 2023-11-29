@@ -10,6 +10,9 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import Container from 'react-bootstrap/Container';
 import logoImage from './img/AllAireUpdated.png';
+/*import Dropdown from 'react-bootstrap/Dropdown';*/
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 
 Amplify.configure(config);
 
@@ -18,6 +21,10 @@ function App() {
   const [sensorData, setSensorData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [latestData, setLatestData] = useState({});
+  const [apiUrl, setApiUrl] = useState('http://allaire-api.us-east-1.elasticbeanstalk.com/sensor/all');
+  const [error, setError] = useState(null);
+
+
 
   const transformSensorData = (rawData) => {
     return rawData.map(item => ({
@@ -41,19 +48,33 @@ function App() {
 
 
   useEffect(() => {
-    fetch('http://allaire-api.us-east-1.elasticbeanstalk.com/sensor/all')
+    setLoading(true);
+    setError(null); // Reset error state on new fetch
+    fetch(apiUrl)
       .then(response => response.json())
       .then(data => {
-        const transformedData = transformSensorData(data.sensors);
-        setSensorData(transformedData);
-        setLatestData(transformedData[transformedData.length - 1] || {});
+        if (data && data.sensors.length > 0) {
+          const transformedData = transformSensorData(data.sensors);
+          setSensorData(transformedData);
+          setLatestData(transformedData[transformedData.length - 1] || {});
+        } else {
+          setError("No data available for this selection.");
+        }
         setLoading(false);
       })
       .catch(err => {
         console.error("Failed to fetch sensor data:", err);
+        setError("An error occurred while fetching data.");
         setLoading(false);
       });
-  }, []);
+  }, [apiUrl]);
+  
+  
+
+  const changeApiUrl = (url) => {
+    setApiUrl(url);
+    setLoading(true); 
+  };
 
   const handleSelect = (selectedKey) => {
     setActiveTab(selectedKey);
@@ -100,6 +121,8 @@ function App() {
       </div>
     );
   };
+
+
   const calculateAverages = (data) => {
     const sum = data.reduce((acc, item) => {
       Object.keys(item).forEach(key => {
@@ -143,10 +166,28 @@ function App() {
       }
     };
   };
+
+  
   const renderChart = () => {
+    const dropdown = (
+      <div className="dropdown-container">
+        <select onChange={(e) => changeApiUrl(e.target.value)} value={apiUrl}>
+          <option value='http://allaire-api.us-east-1.elasticbeanstalk.com/sensor/today'>Today</option>
+          <option value='http://allaire-api.us-east-1.elasticbeanstalk.com/sensor/yesterday'>Yesterday</option>
+          
+          <option value='http://allaire-api.us-east-1.elasticbeanstalk.com/sensor/last-week'>Last Week</option>
+        </select>
+      </div>
+    );
+
     if (loading) {
       return <p>Loading...</p>;
     }
+    
+    if (error) {
+      return <p>{error}</p>; // Display the error message
+    }
+    
   
     const averages = calculateAverages(sensorData);
     const descriptions = generateSensorDescriptions(averages);
@@ -165,50 +206,67 @@ function App() {
         return Object.entries(description).map(([key, value]) => <p key={key}>{value}</p>);
       }
     };
-    
   
-    switch (activeTab) {
-      case 'Temperature':
-        return (
-          <div>
+    // const dropdown = (
+    //   <div className="dropdown-container">
+    //     <select onChange={(e) => changeApiUrl(e.target.value)} value={apiUrl}>
+    //       <option value='http://allaire-api.us-east-1.elasticbeanstalk.com/sensor/today'>Today</option>
+    //       <option value='http://allaire-api.us-east-1.elasticbeanstalk.com/sensor/yesterday'>Yesterday</option>
+          
+    //       <option value='http://allaire-api.us-east-1.elasticbeanstalk.com/sensor/last-week'>Last Week</option>
+    //     </select>
+    //   </div>
+    // );
+  
+    return (
+      <div className="chart-container">
+        {activeTab === 'Temperature' && (
+          <>
             <h3>Temperature Data</h3>
-            <p>{`Current Date: ${new Date().toLocaleDateString()}`}</p>
+            {dropdown}
             <ChartComponent data={sensorData} dataKeys={[{ key: "Temperature", unit: "°C" }]} />
             {renderDescription(sensorDescription)}
-          </div>
-        );
-      case 'Humidity':
-        return (
-          <div>
+          </>
+        )}
+        {activeTab === 'Humidity' && (
+          <>
             <h3>Humidity Data</h3>
-            <p>{`Current Date: ${new Date().toLocaleDateString()}`}</p>
+            {dropdown}
             <ChartComponent data={sensorData} dataKeys={[{ key: "Humidity", unit: "%" }]} />
             {renderDescription(sensorDescription)}
-          </div>
-        );
-      case 'CO2':
-        return (
-          <div>
-            <h3>CO2 Data</h3>
-            <p>{`Current Date: ${new Date().toLocaleDateString()}`}</p>
+          </>
+        )}
+        {activeTab === 'CO2' && (
+          <>
+            <h3>CO2 Levels</h3>
+            {dropdown}
             <ChartComponent data={sensorData} dataKeys={[{ key: "Carbon Dioxide", unit: "ppm" }]} />
             {renderDescription(sensorDescription)}
-          </div>
-        );
-        case 'IAQ':
-          return (
-            <div>
-              <h3>Indoor Air Quality Data</h3>
-              <p>{`Current Date: ${new Date().toLocaleDateString()}`}</p>
-              <ChartComponent data={sensorData} dataKeys={[{ key: "PM2.5", unit: "μg/m³" }, { key: "PM1.0", unit: "μg/m³" }, { key: "PM10", unit: "μg/m³", color: "#d88484" }]} />
-              {renderDescription(descriptions.IAQ)}
-            </div>
-          );
-        
-      default:
-        return <div>Select a tab to view data</div>;
-    }
+          </>
+        )}
+        {activeTab === 'IAQ' && (
+          <>
+            <h3>Indoor Air Quality Data</h3>
+            {dropdown}
+            <ChartComponent
+              data={sensorData}
+              dataKeys={[
+                { key: "PM2.5", unit: "μg/m³" },
+                { key: "PM1.0", unit: "μg/m³" },
+                { key: "PM10", unit: "μg/m³" }
+              ]}
+            />
+            {renderDescription(descriptions.IAQ)}
+          </>
+        )}
+      </div>
+    );
   };
+  
+  
+  
+  
+  
   
 
   const CustomTooltip = ({ active, payload, label }) => {
@@ -236,9 +294,9 @@ function App() {
         <LineChart data={data} margin={{ top: 5, right: 100, left: 20, bottom: 5 }}>
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="formattedTs" padding={{ left: 30, right: 30 }} />
-          <YAxis domain={['dataMin - 1', 'dataMax + 1']} />
+          <YAxis domain={['dataMin - 5', 'dataMax + 5']} />
           <Tooltip content={<CustomTooltip />} />
-          <Legend align="center" verticalAlign="top" layout="vertical" />
+          <Legend align="right" verticalAlign="top" layout="horizontal" wrapperStyle={{ paddingRight: '10px', paddingBottom: '10px' }} />
           {dataKeys.map(({ key, unit }, index) => {
             let strokeColor = "#8884d8";
             if (key === "PM10") {
