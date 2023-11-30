@@ -10,7 +10,6 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import Container from 'react-bootstrap/Container';
 import logoImage from './img/AllAireUpdated.png';
-/*import Dropdown from 'react-bootstrap/Dropdown';*/
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 
@@ -23,7 +22,7 @@ function App() {
   const [latestData, setLatestData] = useState({});
   const [apiUrl, setApiUrl] = useState('http://allaire-api.us-east-1.elasticbeanstalk.com/sensor/all');
   const [error, setError] = useState(null);
-  const [countdown, setCountdown] = useState(5); // Starting from 5 seconds
+  const [countdown, setCountdown] = useState(5);
 
 
 
@@ -50,7 +49,7 @@ function App() {
 
   useEffect(() => {
     setLoading(true);
-    setError(null); // Reset error state on new fetch
+    setError(null); 
     fetch(apiUrl)
       .then(response => response.json())
       .then(data => {
@@ -60,14 +59,14 @@ function App() {
           setLatestData(transformedData[transformedData.length - 1] || {});
         } else {
           setError("No data available for this selection.");
-          setCountdown(5); // Start countdown
+          setCountdown(5); 
         }
         setLoading(false);
       })
       .catch(err => {
         console.error("Failed to fetch sensor data:", err);
         setError("An error occurred while fetching data.");
-        setCountdown(5); // Start countdown
+        setCountdown(5); 
         setLoading(false);
       });
   }, [apiUrl]);
@@ -81,7 +80,7 @@ function App() {
       }, 1000);
     }
 
-    return () => clearInterval(timer); // Cleanup timer
+    return () => clearInterval(timer); 
   }, [error]);
 
   useEffect(() => {
