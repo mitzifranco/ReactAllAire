@@ -10,6 +10,18 @@
   margin: auto;
   padding: 20px;
 }
+/* Responsive adjustments for mobile */
+@media screen and (max-width: 768px) { /* Adjust breakpoint as needed */
+  .App {
+    font-size: 80%; /* Smaller font size for mobile */
+    /* Other adjustments for mobile view */
+  }
+  .dashboard-container {
+    padding: 10px;
+    margin: 10px 0; /* Reduce margin and padding */
+  }
+
+}
 
 /* Header Styles */
 .App-header {
@@ -114,6 +126,7 @@
   .dashboard-bubble {
     width: 100%; /* Full width on mobile devices */
     margin-bottom: 10px; /* Optional: add some space between bubbles */
+    
   }
 }
 
